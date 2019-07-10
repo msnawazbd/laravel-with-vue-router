@@ -7,10 +7,44 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+// vue form
+import { Form, HasError, AlertError } from 'vform'
+window.Form = Form;
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+
 // import vue router
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+// vue filter
+Vue.filter('capitalize', function(value){
+    if (!value) return ''
+    value = value.toString()
+    return value.charAt(0).toUpperCase() + value.slice(1)
+});
+
+// moment js
+import moment from 'moment'
+Vue.filter('dateFormat', function(date){
+    return moment(date).format('MMMM Do YYYY');
+});
+
+// progress bar
+import VueProgressBar from 'vue-progressbar'
+
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '2px'
+})
+
+// sweet alert
+import VueSweetalert2 from 'vue-sweetalert2';
+Vue.use(VueSweetalert2);
+
+// custom event
+window.Fire = new Vue();
 
 // define routes
 let routes = [

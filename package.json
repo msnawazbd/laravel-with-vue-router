@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^5.9.0",
-        "axios": "^0.18",
+        "axios": "^0.18.1",
         "bootstrap": "^4.1.0",
         "cross-env": "^5.1",
         "jquery": "^3.2",
@@ -26,6 +26,10 @@
     },
     "dependencies": {
         "admin-lte": "^3.0.0-alpha.2",
-        "vue-router": "^3.0.7"
+        "moment": "^2.24.0",
+        "vform": "^1.0.1",
+        "vue-progressbar": "^0.7.5",
+        "vue-router": "^3.0.7",
+        "vue-sweetalert2": "^2.1.1"
     }
 }

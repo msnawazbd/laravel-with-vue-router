@@ -124,7 +124,10 @@
         <div class="content-header">
             <div class="container-fluid">
                 <router-view></router-view>
-            </div><!-- /.container-fluid -->
+                <!-- set progressbar -->
+                <vue-progress-bar></vue-progress-bar>
+            </div>
+            <!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
     </div>
