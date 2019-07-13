@@ -46,6 +46,9 @@ Vue.use(VueSweetalert2);
 // custom event
 window.Fire = new Vue();
 
+// Vue pagination
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 // define routes
 let routes = [
     { path: '/dashboard', component: require('./components/DashboardComponent.vue').default },

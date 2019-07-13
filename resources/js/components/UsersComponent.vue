@@ -26,7 +26,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="user in users" :key="user.id">
+                            <tr v-for="user in users.data" :key="user.id">
                                 <td>{{ user.id }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
@@ -39,6 +39,9 @@
                             </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div class="card-footer">
+                        <pagination :data="users" @pagination-change-page="getResults"></pagination>
                     </div>
                 </div>
             </div>
@@ -130,6 +133,12 @@
             }
         },
         methods : {
+            getResults(page = 1) {
+                axios.get('api/users?page=' + page)
+                    .then(response => {
+                        this.users = response.data;
+                    });
+            },
             updateUser(){
                 this.$Progress.start();
                 this.form.put("api/users/" + this.form.id)
@@ -158,7 +167,7 @@
             loadUsers(){
                 axios.get('api/users')
                     .then(response => {
-                        this.users = response.data.data;
+                        this.users = response.data;
                     })
                     .catch()
             },
