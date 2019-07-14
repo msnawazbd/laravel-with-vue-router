@@ -38,7 +38,7 @@ class UserController extends Controller
             'type' => 'required',
         ]);
 
-        return User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'bio' => $request->bio,
@@ -46,6 +46,14 @@ class UserController extends Controller
             'photo' => $request->photo,
             'password' => Hash::make($request->password),
         ]);
+
+        //return $user;
+
+        if($user->id) {
+            return response(['success' => true, "msg" => "Data saved successfully!"], 200);
+        } else {
+            return response(['errors' => true], 500);
+        }
     }
 
     /**
@@ -79,9 +87,11 @@ class UserController extends Controller
             'password' => 'sometimes|min:6',
         ]);
 
-        $user->update($request->all());
-
-        return ['message' => 'Update Successfully'];
+        if($user->update($request->all())) {
+            return response(['success' => true, "msg" => "Data update successfully!"], 200);
+        } else {
+            return response(['errors' => true], 500);
+        }
     }
 
     /**
@@ -93,8 +103,26 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
 
-        return ['message' => 'User delete successfully'];
+        if($user->delete()) {
+            return response(['success' => true, "msg" => "Data delete successfully!"], 200);
+        } else {
+            return response(['errors' => true], 500);
+        }
+    }
+
+    public function search()
+    {
+        if($search = \Request::get('q')){
+            $users = User::where(function ($query) use ($search){
+                $query->where('name', 'LIKE', "%$search%")
+                    ->orWhere('email', 'LIKE', "%$search%")
+                    ->orWhere('type', 'LIKE', "%$search%");
+            })->paginate(5);
+        } else {
+            $users = User::latest()->paginate(5);
+        }
+
+        return $users;
     }
 }

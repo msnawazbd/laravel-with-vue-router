@@ -194,6 +194,10 @@
                 axios.get('api/users?page=' + page)
                     .then(response => {
                         this.users = response.data;
+                    })
+                    .catch(() => {
+                        this.$swal("Failed!", "There was something wrong.", "warning");
+                        this.$Progress.fail();
                     });
             },
             updateUser(){
@@ -226,7 +230,10 @@
                     .then(response => {
                         this.users = response.data;
                     })
-                    .catch()
+                    .catch(() => {
+                        this.$swal("Failed!", "There was something wrong.", "warning");
+                        this.$Progress.fail();
+                    })
             },
             deleteUser(id) {
                 this.$swal({
@@ -273,11 +280,23 @@
                     })
                     .catch(() => {
                         this.$Progress.fail();
+                        this.$swal("Failed!", "There was something wrong.", "warning");
                     });
             }
         },
         created() {
+            // listen search fire event
+            Fire.$on('searching', () => {
+               let query = this.$parent.search;
+               axios.get('api/findUsers?q=' + query)
+                   .then(response => {
+                       this.users = response.data
+                   })
+                   .catch(errors => console.log(errors))
+            });
+            // load all users
             this.loadUsers();
+            // listen any action event
             Fire.$on('afterAction', () => {
                 this.loadUsers()
             });

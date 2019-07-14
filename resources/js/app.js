@@ -100,5 +100,20 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    data: {
+        search : ''
+    },
+    methods: {
+        /*searchit(){
+            // console.log('searching..')
+            Fire.$emit('searching');
+        }*/
+
+        // listent the fire event each 1 sec after type in search field
+        searchit: _.debounce(() => {
+            Fire.$emit('searching');
+        }, 1000)
+    }
+
 });

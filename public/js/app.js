@@ -2040,6 +2040,10 @@ __webpack_require__.r(__webpack_exports__);
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       axios.get('api/users?page=' + page).then(function (response) {
         _this2.users = response.data;
+      })["catch"](function () {
+        _this2.$swal("Failed!", "There was something wrong.", "warning");
+
+        _this2.$Progress.fail();
       });
     },
     updateUser: function updateUser() {
@@ -2076,7 +2080,11 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('api/users').then(function (response) {
         _this4.users = response.data;
-      })["catch"]();
+      })["catch"](function () {
+        _this4.$swal("Failed!", "There was something wrong.", "warning");
+
+        _this4.$Progress.fail();
+      });
     },
     deleteUser: function deleteUser(id) {
       var _this5 = this;
@@ -2125,13 +2133,26 @@ __webpack_require__.r(__webpack_exports__);
         _this6.$Progress.finish();
       })["catch"](function () {
         _this6.$Progress.fail();
+
+        _this6.$swal("Failed!", "There was something wrong.", "warning");
       });
     }
   },
   created: function created() {
     var _this7 = this;
 
-    this.loadUsers();
+    // listen search fire event
+    Fire.$on('searching', function () {
+      var query = _this7.$parent.search;
+      axios.get('api/findUsers?q=' + query).then(function (response) {
+        _this7.users = response.data;
+      })["catch"](function (errors) {
+        return console.log(errors);
+      });
+    }); // load all users
+
+    this.loadUsers(); // listen any action event
+
     Fire.$on('afterAction', function () {
       _this7.loadUsers();
     }); // call this function after each 3 seconds
@@ -79120,7 +79141,20 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
 
 var app = new Vue({
   el: '#app',
-  router: router
+  router: router,
+  data: {
+    search: ''
+  },
+  methods: {
+    /*searchit(){
+        // console.log('searching..')
+        Fire.$emit('searching');
+    }*/
+    // listent the fire event each 1 sec after type in search field
+    searchit: _.debounce(function () {
+      Fire.$emit('searching');
+    }, 1000)
+  }
 });
 
 /***/ }),
