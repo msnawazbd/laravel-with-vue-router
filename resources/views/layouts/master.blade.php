@@ -46,21 +46,21 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="index3.html" class="brand-link">
-            <img src="./img/recruitment.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <router-link to="/dashboard" class="brand-link">
+            <img src="{{ asset('img/recruitment.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
                  style="opacity: .8">
             <span class="brand-text font-weight-light">Lara Starter</span>
-        </a>
+        </router-link>
 
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="image">
-                    <img src="./img/user.png" class="img-circle elevation-2" alt="User Image">
+                    <img src="{{ asset('img/user.png') }}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
-                    <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+                    <router-link to="/profile" class="d-block">{{ Auth::user()->name }}</router-link>
                 </div>
             </div>
 
@@ -91,6 +91,14 @@
                                 </router-link>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <router-link to="/developer" class="nav-link">
+                            <i class="nav-icon fas fa-users-cog orange"></i>
+                            <p>
+                                Developer
+                            </p>
+                        </router-link>
                     </li>
                     <li class="nav-item">
                         <router-link to="/profile" class="nav-link">

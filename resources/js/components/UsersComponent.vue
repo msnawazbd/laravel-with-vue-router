@@ -33,6 +33,7 @@
                                 <td><span class="badge bg-success">{{ user.type | capitalize }}</span></td>
                                 <td>{{ user.created_at | dateFormat }}</td>
                                 <td>
+                                    <button class="btn btn-dark btn-sm" @click="viewModal(user.id)"><i class="fas fa-eye"></i></button>
                                     <button class="btn btn-info btn-sm" @click="editModal(user)"><i class="fas fa-edit"></i></button>
                                     <button class="btn btn-danger btn-sm" @click="deleteUser(user.id)"><i class="fas fa-trash"></i></button>
                                 </td>
@@ -47,7 +48,7 @@
             </div>
         </div>
 
-        <!-- Modal -->
+        <!-- User create/Edit Modal -->
         <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -112,6 +113,49 @@
             </div>
         </div>
 
+        <!-- User create/Edit Modal -->
+        <div class="modal fade" id="viewUserModal" tabindex="-1" role="dialog" aria-labelledby="viewUserModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-user-edit"></i> {{ user.name }}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-condensed">
+                            <tbody>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Bio</th>
+                                <td>{{ user.bio }}</td>
+                            </tr>
+                            <tr>
+                                <th>User Type</th>
+                                <td><span class="badge bg-success">{{ user.type | capitalize }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Created At</th>
+                                <td>{{ user.created_at | dateFormat }}</td>
+                            </tr>
+                            <tr>
+                                <th>Updated At</th>
+                                <td>{{ user.updated_at | dateFormat }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -120,6 +164,7 @@
         data(){
             return {
                 users : {},
+                user: [],
                 editmode: false,
                 form : new Form({
                     id: '',
@@ -133,6 +178,18 @@
             }
         },
         methods : {
+            viewModal(id){
+                axios.get('api/users/' + id)
+                    .then(response => {
+                        this.user = response.data;
+                        $('#viewUserModal').modal('show');
+                    })
+                    .catch(() => {
+                        this.$swal("Failed!", "There was something wrong.", "warning");
+                        this.$Progress.fail();
+                    })
+                console.log(id);
+            },
             getResults(page = 1) {
                 axios.get('api/users?page=' + page)
                     .then(response => {
